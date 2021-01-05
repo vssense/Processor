@@ -1,0 +1,75 @@
+txwindow
+
+in 
+pop rrx    ; rrx - radius, rqx - live x, rxx, ryx - coordinates, rmx - index in RAM, 
+
+push 200  ; rkx - center x, rlx - center y
+pop rkx
+push 200
+pop rlx
+
+push rrx
+push -1
+mul
+pop rqx
+
+
+START :
+	push rrx
+	push rrx
+	mul
+	push rqx
+	push rqx
+	mul
+	dec
+	sqrt
+
+	pop ryx
+	push rqx
+	push rkx
+	sum
+
+	pop rxx
+	call ,
+
+	push ryx
+	push -1
+	mul
+	pop ryx
+	call ,
+
+	refresh
+	push rqx
+	push 1
+	sum
+	pop rqx
+
+	push rrx + 1
+	push rqx
+	jne START
+
+stop
+
+, :
+	push ryx
+	round
+	push 250
+	sum
+	push rlx
+	sum
+	push 250
+	push 2
+	mul
+	mul
+
+	push rxx
+	round
+	push 250
+	sum
+	sum
+
+	pop rmx
+	push 1
+	pop [rmx]
+
+	ret

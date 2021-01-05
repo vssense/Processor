@@ -1,0 +1,172 @@
+call main
+out      
+stop   
+
+
+main :   
+push rax 
+pop rbx  
+push rax 
+push rax 
+push 4
+sum      
+pop rax  
+pop [rax]
+in
+pop [rbx + 1]
+in
+pop [rbx + 2]
+in
+pop [rbx + 3]
+push [rbx + 3]
+push [rbx + 2]
+push [rbx + 1]
+call Square
+push 8.000000
+out
+push 0.000000
+push [rax]
+pop rax   
+ret       
+
+Square :   
+push rax 
+pop rbx  
+push rax 
+push rax 
+push 5
+sum      
+pop rax  
+pop [rax]
+pop [rbx + 1]
+pop [rbx + 2]
+pop [rbx + 3]
+push [rbx + 1]
+push 0.000000
+je TRUE_0        
+push 0           
+jmp CONTINUE_0
+TRUE_0 :      
+push 1           
+jmp CONTINUE_0
+CONTINUE_0 :  
+push 0        
+jne TRUE_1 
+jmp FALSE_1
+TRUE_1 :   
+push [rbx + 2]
+push 0.000000
+je TRUE_2        
+push 0           
+jmp CONTINUE_2
+TRUE_2 :      
+push 1           
+jmp CONTINUE_2
+CONTINUE_2 :  
+push 0        
+jne TRUE_3 
+jmp FALSE_3
+TRUE_3 :   
+push [rbx + 3]
+push 0.000000
+je TRUE_4        
+push 0           
+jmp CONTINUE_4
+TRUE_4 :      
+push 1           
+jmp CONTINUE_4
+CONTINUE_4 :  
+push 0        
+jne TRUE_5 
+jmp FALSE_5
+TRUE_5 :   
+push 8.000000
+out
+jmp CONTINUE_5
+FALSE_5 :     
+push 0.000000
+out
+jmp CONTINUE_5
+CONTINUE_5 :  
+jmp CONTINUE_3
+FALSE_3 :     
+push 1.000000
+push 2.000000
+dec
+push [rbx + 3]
+mul
+push [rbx + 2]
+div
+out
+jmp CONTINUE_3
+CONTINUE_3 :  
+jmp CONTINUE_1
+FALSE_1 :     
+push [rbx + 2]
+push [rbx + 2]
+mul
+push 4.000000
+push [rbx + 1]
+mul
+push [rbx + 3]
+mul
+dec
+sqrt
+pop [rbx + 4]
+push [rbx + 4]
+push 0.000000
+je TRUE_6        
+push 0           
+jmp CONTINUE_6
+TRUE_6 :      
+push 1           
+jmp CONTINUE_6
+CONTINUE_6 :  
+push 0        
+jne TRUE_7 
+jmp FALSE_7
+TRUE_7 :   
+push 1.000000
+push 2.000000
+dec
+push [rbx + 2]
+mul
+push 2.000000
+push [rbx + 1]
+mul
+div
+out
+jmp CONTINUE_7
+FALSE_7 :     
+push 1.000000
+push 2.000000
+dec
+push [rbx + 2]
+mul
+push [rbx + 4]
+sum
+push 2.000000
+push [rbx + 1]
+mul
+div
+out
+push 1.000000
+push 2.000000
+dec
+push [rbx + 2]
+mul
+push [rbx + 4]
+dec
+push 2.000000
+push [rbx + 1]
+mul
+div
+out
+jmp CONTINUE_7
+CONTINUE_7 :  
+jmp CONTINUE_1
+CONTINUE_1 :  
+push 0.000000
+push [rax]
+pop rax   
+ret       

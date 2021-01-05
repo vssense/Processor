@@ -1,0 +1,119 @@
+txwindow
+
+push 100 
+pop rrx    ; rrx - radius, rqx - live x, rxx, ryx - coordinates, rmx - index in RAM, 
+
+
+RESTART :
+clear
+
+changecolor
+
+random  ; rkx - center x, rlx - center y
+pop rkx
+random
+pop rlx
+
+push rrx
+push -1
+mul
+pop rqx
+
+push rrx
+push -2
+div
+pop rux
+
+START :
+	push rrx
+	push rrx
+	mul
+	push rqx
+	push rqx
+	mul
+	dec
+	sqrt
+
+	pop ryx
+	push rqx
+	pop rxx
+
+	call ,
+	call '
+
+	push rxx
+	push -1
+	mul
+	pop rxx
+	call ,
+	call '
+
+	push ryx
+	push -1
+	mul
+	pop ryx
+	call ,
+	call '
+
+	push rxx
+	push -1
+	mul
+	pop rxx
+	call ,
+	call '
+
+	refresh
+	push rqx
+	push 1
+	sum
+	pop rqx
+
+	push rux + 1
+	push rqx
+	jne START
+
+
+jmp RESTART
+stop
+
+' : 
+	push rxx
+	push ryx
+	pop rxx
+	pop ryx
+
+	call ,
+
+	push rxx
+	push ryx
+	pop rxx
+	pop ryx
+	ret
+
+
+
+, :
+	push ryx
+	round
+	push 250
+	sum
+	push rlx
+	sum
+	push 250
+	push 2
+	mul
+	mul
+
+	push rxx
+	round
+	push 250
+	push rkx
+	sum
+	sum
+	sum
+
+	pop rmx
+	push 1
+	pop [rmx]
+
+	ret

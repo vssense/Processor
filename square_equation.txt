@@ -1,0 +1,93 @@
+in
+pop rax
+in
+pop rbx
+in
+pop rcx
+
+push rax
+push 0
+jne CONTINUE
+push rbx
+push 0
+jne CONTINUE
+push rcx
+push 0
+jne CONTINUE
+push 8
+out
+jmp STOP
+
+CONTINUE :
+push rax
+push 0
+je YES1
+jmp DISCR
+
+NO_ROOTS :
+push 0
+out
+jmp STOP
+
+YES1 :
+    call LINEAR
+    jmp STOP
+
+LINEAR : 
+    push rcx
+    push -1
+    mul
+    push rbx
+    div
+    out
+    ret
+
+DISCR :
+    push rbx
+    push rbx
+    mul
+    push -4
+    push rax
+    push rcx
+    mul
+    mul
+    sum
+    pop rdx
+
+    push rdx
+    push 0
+    jae YES2
+    jmp NO_ROOTS
+
+    YES2 :
+    call ROOTS
+    jmp STOP
+
+
+    ROOTS :
+        push rdx
+        sqrt
+        pop rdx
+        push -1
+        push rbx
+        mul
+        push rdx
+        sum
+        push 2
+        push rax
+        mul
+        div
+        out
+        push -1
+        push rbx
+        mul
+        push rdx
+        dec
+        push 2
+        push rax
+        mul
+        div
+        out
+        ret
+STOP :
+    stop

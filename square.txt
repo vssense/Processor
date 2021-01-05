@@ -1,0 +1,257 @@
+txwindow
+
+push 100
+pop rlx
+
+push 0
+pop rax
+push rlx 
+pop rbx    ; rbx, rlx - coordinates of start of main diagonal
+push rlx
+pop rcx
+push rlx
+push rlx
+sum
+pop rdx	   ; rcx, rdx - coordinates of end of main diagonal
+
+blue
+
+
+YEAH :
+call MOVE\/
+call MOVE->
+call MOVE/\
+call MOVE<-
+
+jmp YEAH
+stop
+
+MOVE<- :
+	CYCLE8 :
+	call SQUARE
+	clear
+	changecolor
+
+	push rax
+	push 3
+	dec
+	pop rax
+	push rbx
+	push 1
+	sum
+	pop rbx
+
+	push rcx
+	push 3
+	dec
+	pop rcx
+	push rdx
+	push 1
+	sum
+	pop rdx
+
+	push rax
+	push 0
+	ja CYCLE8
+	ret
+
+MOVE/\ :
+	CYCLE7 :
+	call SQUARE
+	clear
+	changecolor
+
+	push rax
+	push 1
+	dec
+	pop rax
+	push rbx
+	push 3
+	dec
+	pop rbx
+
+	push rcx
+	push 1
+	dec
+	pop rcx
+	push rdx
+	push 3
+	dec
+	pop rdx
+
+	push rbx
+	push 0
+	ja CYCLE7
+	ret
+
+MOVE\/ :
+	CYCLE5 :
+	call SQUARE
+	clear
+	changecolor
+
+	push rax
+	push 1
+	sum
+	pop rax
+	push rbx
+	push 3
+	sum
+	pop rbx
+
+	push rcx
+	push 1
+	sum
+	pop rcx
+	push rdx
+	push 3
+	sum
+	pop rdx
+
+	push rdx
+	push 497
+	jb CYCLE5
+	ret
+
+MOVE-> :
+	CYCLE6 :
+	call SQUARE
+	clear
+	changecolor
+
+	push rax
+	push 3
+	sum
+	pop rax
+	push rbx
+	push 1
+	dec
+	pop rbx
+
+	push rcx
+	push 3
+	sum
+	pop rcx
+	push rdx
+	push 1
+	dec
+	pop rdx
+
+	push rcx
+	push 497
+	jb CYCLE6
+	ret
+
+
+
+SQUARE :
+	push rax 
+	pop rhx
+	push rbx
+	pop rjx
+
+	call ->
+
+	call \/
+
+	call <-
+
+	call /\
+	refresh
+
+	ret
+
+
+
+/\ :
+	CYCLE4 :
+	push 500
+	push rjx
+	mul
+	push rhx
+	sum
+	pop rex
+
+	push 1
+	pop [rex]
+
+	push rjx
+	push 1
+	dec
+	pop rjx
+
+	push rjx
+	push rbx
+	jne CYCLE4
+	ret
+
+
+<- :
+	CYCLE3 :
+	push 500
+	push rjx
+	mul
+	push rhx
+	sum
+	pop rex
+
+	push 1
+	pop [rex]
+
+	push rhx
+	push 1
+	dec
+	pop rhx
+
+	push rhx
+	push rax
+	jne CYCLE3
+	ret
+
+
+\/ :
+	CYCLE2 :
+	push 500
+	push rjx
+	mul
+	push rhx
+	sum
+	pop rex
+
+	push 1
+	pop [rex]
+
+	push 1
+	push rjx
+	sum
+	pop rjx
+
+	push rjx
+	push rdx
+	jne CYCLE2
+	ret
+
+
+-> :
+	CYCLE1 :
+
+	push 500
+	push rjx
+	mul
+	push rhx
+	sum
+	pop rex
+
+	push 1
+	pop [rex]
+
+	push 1
+	push rhx 
+	sum
+	pop rhx
+
+	push rhx 
+	push rcx
+	jne CYCLE1
+
+	ret
