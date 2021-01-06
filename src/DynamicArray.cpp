@@ -10,12 +10,12 @@ struct DynamicArray
 };
 
 DynamicArray* ConstructArray(size_t capacity)
-{	
-	assert(capacity < 20000000);
-
+{
 	DynamicArray* arr = (DynamicArray*)calloc(1, sizeof(DynamicArray));
 	
 	arr->buffer = (elem_t*)calloc(capacity, sizeof(elem_t));
+	assert(arr->buffer);
+
 	arr->size = 0;
 	arr->capacity = capacity;
 
@@ -24,6 +24,8 @@ DynamicArray* ConstructArray(size_t capacity)
 
 void CheckBuffer(DynamicArray* arr)
 {
+	assert(arr);
+
 	if (arr->size >= arr->capacity - 1)
 	{
 		elem_t* tmp = (elem_t*)realloc(arr->buffer, arr->capacity * 2 * sizeof(elem_t));
@@ -52,6 +54,8 @@ size_t GetSize(DynamicArray* arr) { return arr->size; }
 
 void PopArr(DynamicArray* arr)
 {
+	assert(arr);
+
 	if (GetSize(arr) == 0)
 	{
 		printf("You try to pop from empty array\n");
@@ -65,6 +69,8 @@ void PopArr(DynamicArray* arr)
 
 elem_t TopArr(DynamicArray* arr)
 {
+	assert(arr);
+
 	if (GetSize(arr) == 0)
 	{
 		printf("You try to top from empty array\n");
@@ -77,24 +83,12 @@ elem_t TopArr(DynamicArray* arr)
 	}
 }
 
-
-/*int main()
+void DestructArray(DynamicArray* arr)
 {
-	DynamicArray* arr = ConstructArray(1);
+	assert(arr);
+	assert(arr->buffer);
 
-	PushArr(arr, 123);
-	printf("%d\n\n\n", TopArr(arr));
-	PopArr(arr);
-
-	for (int i = 0; i < 100; ++i)
-	{
-		PushArr(arr, i * i);
-	}
-
-	for (int i = 0; i < 100; ++i)
-	{
-		printf("%d  ", TopArr(arr));
-		PopArr(arr);
-	}
-
-}*/
+	free(arr->buffer);
+	arr->size = 0;
+	arr->capacity = 0;
+}

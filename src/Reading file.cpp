@@ -22,7 +22,7 @@ struct text
 //!  @return lenght of file
 //-----------------------------------------------
 
-size_t lenOfFile(FILE* in)
+size_t LenOfFile(FILE* in)
 {
     assert(in != nullptr);
 
@@ -43,9 +43,10 @@ size_t lenOfFile(FILE* in)
 //!  @note if you have windows, function will clear text from '\r'
 //-----------------------------------------------
 
-size_t readFile(FILE* in, size_t num_symbols, char* start)
+size_t ReadFile(FILE* in, size_t num_symbols, char* start)
 {
-    assert(in != nullptr);
+    assert(in);
+    assert(start);
 
     size_t real_num_symbols = fread(start, sizeof(char), num_symbols, in);
     
@@ -64,9 +65,9 @@ size_t readFile(FILE* in, size_t num_symbols, char* start)
 //!  @return number of lines
 //-----------------------------------------------
 
-int numLines(const char* start, size_t num_symbols)
+int NumLines(const char* start, size_t num_symbols)
 {
-    assert(start != nullptr);
+    assert(start);
 
     int num = 1;
     for (size_t i = 0; i < num_symbols; ++i)
@@ -84,10 +85,10 @@ int numLines(const char* start, size_t num_symbols)
 //!  @note also calculates lenght of each string
 //-----------------------------------------------
 
-void makeLines(char* start, str* lines, size_t num_symbols)
+void MakeLines(char* start, str* lines, size_t num_symbols)
 {
-    assert(start != nullptr);
-    assert(lines != nullptr);
+    assert(start);
+    assert(lines);
 
     int lastI    = 0;
     int Num_line = 0;
@@ -116,13 +117,15 @@ void makeLines(char* start, str* lines, size_t num_symbols)
 //!
 //-----------------------------------------------
 
-void print_lines(str* lines, size_t num, FILE* const out)
+void PrintLines(str* lines, size_t num, FILE* const out)
 {
-    assert(lines != nullptr);
-    assert(out   != nullptr);
+    assert(lines);
+    assert(out);
 
     for (size_t j = 0; j < num; j++)
-        fprintf(out, "<%s>\n", lines[j].str);
+    {
+        fprintf(out, "%s\n", lines[j].str);
+    }
 }
 
 //------------------------------------------------
@@ -138,11 +141,27 @@ void print_lines(str* lines, size_t num, FILE* const out)
 
 void ReadTextAndMakeLines(text* text, FILE* in)
 {
-    text->num_symbols = lenOfFile(in);
+    assert(text);
+
+    text->num_symbols = LenOfFile(in);
     text->start       = (char*)calloc(text->num_symbols + 1, sizeof(char));
-    text->num_symbols = readFile(in, text->num_symbols, text->start);
-    text->num_str     = numLines(text->start, text->num_symbols);
+    text->num_symbols = ReadFile(in, text->num_symbols, text->start);
+    text->num_str     = NumLines(text->start, text->num_symbols);
     text->lines       = (str*)calloc(text->num_str + 1, sizeof(str));
-    makeLines(text->start, text->lines, text->num_symbols);
-    print_lines(text->lines, text->num_str, stdin);
+    MakeLines(text->start, text->lines, text->num_symbols);
+}
+
+void DestructText(text* text)
+{
+    assert(text);
+    assert(text->start);
+    assert(text->lines);
+
+    free(text->start);
+    free(text->lines);
+
+    text->start = nullptr;
+    text->lines = nullptr;
+    text->num_str = 0;
+    text->num_symbols = 0;
 }

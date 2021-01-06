@@ -44,11 +44,15 @@ int main(const int argc, const char* argv[])
 
     processing(&cpu);
 
+    DestroyCPU(&cpu);
+
     return 0;
 }
 
 bool IsVersOk(CPU* cpu)
 {
+    assert(cpu);
+
     return (cpu->work_code[0] == cpu->vers[0] and
             cpu->work_code[1] == cpu->vers[1] and
             cpu->work_code[2] == cpu->vers[2] and
@@ -57,6 +61,8 @@ bool IsVersOk(CPU* cpu)
 
 void CheckVersion(CPU* cpu)
 {
+    assert(cpu);
+
     if (!IsVersOk(cpu))
     {
         assert(! "compiler and assembler versions do not match");
@@ -65,6 +71,8 @@ void CheckVersion(CPU* cpu)
 
 void ConstructCPU(CPU* cpu, FILE* work_file)
 {
+    assert(cpu);
+
     char vers[6] = "ZS1.0";
     cpu->vers = vers;
     CONSTRUCT(&cpu->stack);
@@ -81,20 +89,26 @@ void ConstructCPU(CPU* cpu, FILE* work_file)
 
 void DestroyCPU(CPU* cpu)
 {
+    assert(cpu);
+    assert(cpu->work_code);
+    assert(cpu->RAM);
+
     cpu->vers = nullptr;
     Destroy(&cpu->stack);
 
     free(cpu->work_code);
+    free(cpu->RAM);
 }
 
 void WorkWithCommand(CPU* cpu)
 {
+    assert(cpu);
+
     int command = cpu->work_code[cpu->ofs];
    
     #define DEF_CMD(name, num, arg, code) \
         case num :                        \
         {                                 \
-                                          \
             code                          \
             break;                        \
         }
@@ -109,11 +123,6 @@ void WorkWithCommand(CPU* cpu)
         }
     }
 
-    // StackDump(&cpu->stack);
-    // printf("rax : %lf\n", cpu->RGS[0]);
-    // printf("rbx : %lf\n", cpu->RGS[1]);
-    // printf("rcx : %lf\n", cpu->RGS[2]);
-    // printf("%lf  %lf %lf %lf\n", cpu->RAM[0], cpu->RAM[1], cpu->RAM[2], cpu->RAM[2]);
     cpu->ofs++;
 }
 
@@ -125,5 +134,4 @@ void processing(CPU* cpu)
     {
         WorkWithCommand(cpu);
     }
-
 }

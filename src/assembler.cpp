@@ -107,13 +107,26 @@ MODE GetMode(char** str)
     {
         if (sscanf(*str, "%lf", &tmp)) 
         {
-            if (IsBrace) return RAM_DOUBLE;
+            if (IsBrace)
+            {
+                return RAM_DOUBLE;
+            }
+
             return STACK_DOUBLE;
         }
-        if (IsBrace) return RAM_REGISTER;
+        if (IsBrace)
+        {
+            return RAM_REGISTER;
+        }
+
         return STACK_REGISTER;
     }
-    if (IsBrace) return RAM_BOTH;
+
+    if (IsBrace)
+    {
+        return RAM_BOTH;
+    }
+
     return STACK_BOTH;
 }
 
@@ -246,5 +259,7 @@ void CompileFile(FILE* user_file, FILE* work_file)
     fwrite(buffer, ofs, sizeof(char), work_file);
 
     free(buffer);
+    DestructArray(labels);
+    DestructText(&user_text);
 }
 
